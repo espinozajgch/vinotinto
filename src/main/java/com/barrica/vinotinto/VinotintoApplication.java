@@ -1,50 +1,282 @@
 package com.barrica.vinotinto;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.net.URISyntaxException;
 
 @SpringBootApplication
 public class VinotintoApplication {
 
-	public static void main(String[] args) {
-		//SpringApplication.run(VinotintoApplication.class, args);
-		System.out.println("Hola Mundo");
+
+	public static void main(String[] args) throws IOException, URISyntaxException {
+		SpringApplication.run(VinotintoApplication.class, args);
+
+		/*String t = "\uD83E\uDD16\uD83C\uDF77\n" +
+				"\uD83C\uDDFB\uD83C\uDDEA@KervinAndrade2 - @FortalezaEC\n" +
+				"\uD83D\uDDD3\uFE0FJ5 CONMEBOL Sudamericana\n" +
+				"\uD83E\uDD45Boca Juniors 1-1 Fortaleza\n" +
+				"\n" +
+				"\uD83D\uDCCA@SofascoreLA\n" +
+				"⏱Minutos: 15\n" +
+				"⚽Goles: 1\n" +
+				"\uD83C\uDFAFDisparos a Puerta: 1\n" +
+				"✅Pases: 2/3 (66%)\n" +
+				"✅Balones Largos: 1/1 (100%)\n" +
+				"✅Duelos Ganados: 1\n" +
+				"⭐Rating: 7.4\n" +
+				"https://twitter.com/BocaJrsGolSudam/status/1790922814213484806";
+		System.out.println(t.length());
+		/*
+		Document doc = Jsoup
+				.connect("https://www.google.com/search?q=real+avila&sca_esv=be445f0cc062ab15&rlz=1C5CHFA_enES1096ES1096&sxsrf=ADLYWIKDiSnRvZ-d5DliZKnWTNaNf4v_ag%3A1715025854848&ei=vjc5Zr26M9y5i-gPlZqZSA&ved=0ahUKEwi9ke-W6fmFAxXc3AIHHRVNBgkQ4dUDCBA&uact=5&oq=real+avila&gs_lp=Egxnd3Mtd2l6LXNlcnAiCnJlYWwgYXZpbGEyDxAuGIAEGEYYJxiKBRj9ATILEAAYgAQYsQMYgwEyCxAAGIAEGLEDGIMBMgQQABgDMgUQABiABDILEAAYgAQYsQMYgwEyDhAuGIAEGMcBGI4FGK8BMgUQABiABDIEEAAYAzIFEAAYgAQyGRAAGIAEGEYYigUY_QEYlwUYjAUY3QTYAQNIgBhQiQhYkBRwAngBkAEAmAGWAaABpwSqAQMyLjO4AQPIAQD4AQGYAgegAvAEwgIHECMYsAMYJ8ICBxAuGLADGCfCAgoQABiwAxjWBBhHwgINEAAYgAQYsAMYQxiKBcICExAuGIAEGLADGEMYyAMYigXYAQHCAgoQLhiABBgnGIoFwgILEC4YgAQYsQMYgwHCAg4QABiABBixAxiDARiKBcICBxAuGIAEGArCAhcQLhiABBiKBRiXBRjcBBjeBBjgBNgBApgDAIgGAZAGFLoGBggBEAEYCLoGBggCEAEYFLoGBggDEAEYE5IHAzMuNKAH_kI#sie=t;/m/026_phn;2;/m/0d56yj;st;fp;1;;;")
+				.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
+				.get();
+		System.out.println(doc);
+		Elements newsHeadlines = doc.select("div.fwXO9b.XAPH9c");
+
+		for (Element headline : newsHeadlines) {
+			System.out.println(headline.text());
+		}
+
+		/*Map<String, String> worldFlags = generateWorldFlagEmojis();
+		for (Map.Entry<String, String> entry : worldFlags.entrySet()) {
+			System.out.println("País: " + entry.getKey() + ", Emoji: " + entry.getValue());
+		}
+
+		 */
+
+		//String response = getUsers("espinozajgch");
+		//System.out.println(response);
+		//getUserInfo();
+
+/*
+		TwitterCredentialsOAuth1 espinozajgch = new TwitterCredentialsOAuth1(
+				"yCUDD2biYAUlkt9cG9w2GlwGM",
+				"6QIGHlyBWpLMHR4jaTVr1gt9AZw49o4O6dej5FWr3dka0CW2FG",
+				"76861750-0d8sUvEgynS2ikbAFk3ZekOthijtIQ7z4H3ldX358",
+				"ALyMvDj3X2YjcNG0R4qaukR31z5vZxlbfYUvFUt968vsv");
+
+		/*
+		TwitterCredentialsOAuth1 barrica = new TwitterCredentialsOAuth1(
+				"o39STRCZAkQVrBtk3vkuUZLI6",
+				"z4QdjTCFnn2JToeCjZLiRzo5S0hrSX0pHA2nGSsd7UuYM0nNEA",
+				"1774902969072316416-5H60t98Qsga1Td5rH0xT0TUfkLIy0x",
+				"OBAkQ1En1fgYtnxqrSGTDBDVI57LrtFoEKsldLddz5Z8f");
+
+
+
+		createTweets(espinozajgch, "Partido 2 \n https://youtu.be/dYVdHX-odcE");
+		*/
+
+		//getUserInfo(barrica);
+		//createPoll(espinozajgch);
+		//replayTweets(espinozajgch,"\uD83D\uDD25", "1779306611728662980");
+
+
+		//createTweets();
+		//getTweets();
+		/*
+		String bearerToken = "AAAAAAAAAAAAAAAAAAAAAJ%2FxtQEAAAAAPGoLfNNkBlkJ1E98v%2F1X45lXcy0%3DVn4wIeLzvG9Y1qoQaPlLY1qi3qWzoHaRsX9A2h7d3LuRbWXCoH";
+
+		if (null != bearerToken) {
+			//Replace comma separated ids with Tweets Ids of your choice
+			String response = getTweets("1778507109425983728", bearerToken);
+			System.out.println(response);
+		} else {
+			System.out.println("There was a problem getting you bearer token. Please make sure you set the BEARER_TOKEN environment variable");
+		}
+
+		 */
+/*
 
 		Document doc;
 
 		try {
 			// fetching the target website
-			/*
+
 			doc = Jsoup
-					.connect("https://www.sofascore.com/player/samuel-sosa/836584")
+					.connect("https://es.besoccer.com/buscar/Júnior-Moreno")
 					.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
 					.get();
-			System.out.println(doc.html());
-			/**/
 
-			HttpClient client = HttpClient.newHttpClient();
-			HttpRequest request = HttpRequest.newBuilder()
-					.uri(URI.create("https://api.sofascore.com/api/v1/event/11911071/player/35532/statistics"))
-					.build();
+			System.out.println(doc.title());
+			//Element content = doc.getElementById("team_performance");
 
-			HttpResponse<String> response =
-					client.send(request, HttpResponse.BodyHandlers.ofString());
+			Elements body = doc.select("div.row.info");
 
-			System.out.println(response.body());
+			int i = 1;
+			for (Element element : body) {
+				Elements links = element.getElementsByTag("a");
+
+				String linkHref = "";
+				for (Element link : links) {
+					linkHref = link.attr("href");
+					String linkText = link.text();
+
+				}
+				System.out.println(i + " - Jugadores: " + linkHref);
+				i++;
+			}
+
+			Element panel = doc.select("div.panel-body.table-list").first();
+			Elements table = panel.select("div.table-row");
+
+			for (Element link : table) {
+				Elements img = link.getElementsByTag("img");
+				for (Element im : img) {
+					System.out.println("Pais:" + im.attr("alt"));
+				}
+			}
+
+
+			/*doc = Jsoup
+					.connect("https://es.besoccer.com/jugador/partidos/r-romo-28831")
+					.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
+					.get();
+
+			System.out.println(doc.title());
+			//<div id="player-profile">
+			Element content = doc.getElementById("event");
+			//String date = doc.getElementsByClass("lmTable");
+
+
+			Elements body = content.select("tr.row-body");
+
+			for (Element masthead : body) {
+
+				Elements divs = masthead.select("td.green.tiny");
+				if (!divs.isEmpty() && divs.size() >= 2) {
+					System.out.println("Minutos: " + divs.get(0).text());
+					System.out.println("Puntuacion: " + divs.get(1).text());
+				}
+
+				// Seleccionar el div con la clase "marker-wrapper" dentro del td
+				Element markerWrapperDiv = masthead.select("td.match-cell div.marker-wrapper").first();
+
+				// Verificar si se encontró el div con la clase "marker-wrapper"
+				if (markerWrapperDiv != null) {
+					// Obtener el texto dentro del div
+					String texto = markerWrapperDiv.text();
+					System.out.println("Resultado: " + texto);
+				} else {
+					System.out.println("No se encontró ningún div con la clase 'marker-wrapper'.");
+				}
+
+				Element event = masthead.select("div.events").first();
+
+				if (Objects.nonNull(event)) {
+					System.out.println("Eventos:");
+					// Obtener todos los elementos hijos del div principal
+					Elements children = event.getElementsByClass("img-ico");
+
+					Element img = event.getElementsByTag("img").first();
+					if (img != null){
+						System.out.println("Evento:" + img.attr("alt"));
+					}
+					for (Element child : children) {
+						String clase = child.className().replace("img-ico event-","");
+						if(clase.equals("1")){
+							if(child.getElementsByClass("ball-num").first() != null){
+								System.out.println("Goal: " + child.getElementsByClass("ball-num").text());
+							}
+							else {
+								System.out.println("Goal: " + clase);
+							}
+
+						}
+						else
+						if(clase.equals("15")) {
+							System.out.println("Penalty Fallado: ");
+						}
+						else
+						if(clase.equals("18")) {
+							System.out.println("Salio: ");
+						}
+						else
+						if(clase.equals("20")) {
+							System.out.println("Lesion: ");
+						}
+						else
+						if(clase.equals("22")) {
+							System.out.println("Asistencia: ");
+						}
+						else
+						if(clase.equals("5")) {
+							System.out.println("Amarilla: ");
+						}
+						else
+						if(clase.equals("19")) {
+							System.out.println("Entro: ");
+						}
+						else
+						if(clase.equals("25")) {
+							System.out.println("Gol Anulado por el Var: ");
+						}
+						else
+						if(clase.equals("3")) {
+							System.out.println("Roja Directa: ");
+						}
+						else
+						if(clase.equals("4")) {
+							System.out.println("Roja por doble Amarilla: ");
+						}
+					}
+				}
+
+				Elements links = masthead.getElementsByTag("a");
+
+				String linkHref = "";
+				for (Element link : links) {
+					linkHref = link.attr("href");
+					//String linkText = link.text();
+					System.out.println(link.attr("href"));
+
+				}/**/
+				//System.out.println("----");
+
+				/*doc = Jsoup
+						.connect(linkHref)
+						.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
+						.get();
+
+				System.out.println(doc.title());
+
+				 */
+
+
+				//
+				//System.out.println(content);
+
+				/*
+				Element content = doc.getElementById("player-profile");
+				//String date = doc.getElementsByClass("lmTable");
+
+
+				//Element masthead = doc.select("div.events").first();
+				//System.out.println(masthead);
+
+				Elements links = content.getElementsByClass("lmTable__teamName");
+				for (Element link : links) {
+					//String linkHref = link.attr("href");
+					//String linkText = link.text();
+					System.out.println(link.attributes());
+				}
+			//}
+
 		} catch (IOException e) {
 			throw new RuntimeException(e);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		}/**/
+		//int playerId = 878938;
+		//getPlayers();
+		//int eventId = getLastEventId(playerId);
 
+		//getEventData(eventId);
+		//getStatistics(eventId, playerId);
+
+		//SofaScoreCaller sofaScoreCaller = new SofaScoreCaller();
+		//sofaScoreCaller.getPlayersList();
 
 	}
 
