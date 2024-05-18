@@ -1,7 +1,7 @@
 package com.barrica.vinotinto.application.mapper;
 
-import com.barrica.vinotinto.infrastructure.adapter.entity.PlayerDbo;
 import com.barrica.vinotinto.domain.model.dto.PlayerDto;
+import com.barrica.vinotinto.infrastructure.adapter.entity.PlayerDbo;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

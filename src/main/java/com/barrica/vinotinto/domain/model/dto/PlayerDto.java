@@ -1,6 +1,7 @@
 package com.barrica.vinotinto.domain.model.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
 
 @Builder

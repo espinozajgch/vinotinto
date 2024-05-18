@@ -1,6 +1,5 @@
 package com.barrica.vinotinto.util;
 
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 

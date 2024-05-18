@@ -1,23 +1,26 @@
 package com.barrica.vinotinto.application.usecases;
 
-import com.barrica.vinotinto.application.usecases.component.sofascore.SofaScoreCaller;
 import com.barrica.vinotinto.application.mapper.*;
+import com.barrica.vinotinto.application.usecases.component.TweetsDemo;
+import com.barrica.vinotinto.application.usecases.component.sofascore.SofaScoreCaller;
 import com.barrica.vinotinto.domain.model.dto.*;
 import com.barrica.vinotinto.infrastructure.adapter.entity.*;
 import com.barrica.vinotinto.infrastructure.adapter.repository.*;
 import com.barrica.vinotinto.util.EmojiGenerator;
 import com.twitter.clientlib.TwitterCredentialsOAuth1;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
-import static com.barrica.vinotinto.application.usecases.component.TweetsDemo.createTweets;
 import static com.barrica.vinotinto.util.Utils.*;
 
 @Component
@@ -65,13 +68,11 @@ public class SofaScoreUseCaseImpl implements SofaScoreUseCase {
     @Autowired
     TeamRepository teamRepository;
 
+    @Autowired
+    TweetsDemo tweetsDemoComponent;
+
     String NO_DATA = "Sin Datos Estadisticos del Partido";
 
-    TwitterCredentialsOAuth1 barrica = new TwitterCredentialsOAuth1(
-            "o39STRCZAkQVrBtk3vkuUZLI6",
-            "z4QdjTCFnn2JToeCjZLiRzo5S0hrSX0pHA2nGSsd7UuYM0nNEA",
-            "1774902969072316416-5H60t98Qsga1Td5rH0xT0TUfkLIy0x",
-            "OBAkQ1En1fgYtnxqrSGTDBDVI57LrtFoEKsldLddz5Z8f");
 
     @Override
     public List<PlayerDto> getPlayersList() {
@@ -115,6 +116,9 @@ public class SofaScoreUseCaseImpl implements SofaScoreUseCase {
     }
 
     public List<MatchDto> getMatchListNotPublishedByPlayerAndByStatus(int playerId, int status) {
+
+        //System.out.println("Twitter: " + twitterConsumerKey);
+
         List<MatchDbo> matchDboList = matchRepository.findMatchesByPlayerIdAndByPublishedFalseAndStatus(playerId, status);
         return matchDboList.stream().map(matchDbo -> matchMapper.mapMatchDboToDto(matchDbo)).toList();
     }
@@ -134,7 +138,7 @@ public class SofaScoreUseCaseImpl implements SofaScoreUseCase {
             String formattedDate = localDate.format(formatter);
             System.out.println("Fecha Actual:" + formattedDate);
 
-            MatchDbo matchDbo = matchRepository.findPlayerMatchesByDate(player.getPlayerIdSofaScore(), formattedDate);
+            MatchDbo matchDbo = matchRepository.findPlayerMatchesByDateAndByPublishedFalse(player.getPlayerIdSofaScore(), formattedDate);
 
             if(Objects.nonNull(matchDbo)) {
                 System.out.println("Match:" + matchDbo.getMatchIdSofaScore());
@@ -433,7 +437,7 @@ public class SofaScoreUseCaseImpl implements SofaScoreUseCase {
                     }
                     else{
 
-                        if (url.contains("https://twitter.com")) {
+                        if (url.contains("https://twitter.com") || url.contains("https://x.com")) {
 
                             String [] url_parts =  url.split("status/");
                             if(url_parts.length > 1){
@@ -523,12 +527,13 @@ public class SofaScoreUseCaseImpl implements SofaScoreUseCase {
                 }
 
                 else
-                if (url.contains("https://twitter.com")) {
-                    urls.add(url_parts[0] + "/video/1");
+                if (url.contains("https://twitter.com") || url.contains("https://x.com")) {
+                    String replaceDomain = url_parts[0].replace("https://x.com","https://twitter.com");
+
+                    urls.add(replaceDomain + "/video/1");
                     /*String [] url_parts =  url.split("status/");
                     if(url_parts.length > 1){
                         url = "Twitter id: " + url_parts[1];
-
                     }/**/
 
                 }
@@ -541,7 +546,7 @@ public class SofaScoreUseCaseImpl implements SofaScoreUseCase {
         try {
             System.out.println("Publicando Tweet \uD83E\uDD16⚽\uD83C\uDF77");
 
-            String tweetId = createTweets(barrica, post, tweetIdQuote);
+            String tweetId = tweetsDemoComponent.createTweets(post, tweetIdQuote);
 
             matchRrssRepository.save(matchRrssMapper.mapMatchRrssDtoToDbo(MatchRrssDto.builder()
                     .matchIdSofaScore(matchId)

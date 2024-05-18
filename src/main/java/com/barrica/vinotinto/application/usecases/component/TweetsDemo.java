@@ -1,114 +1,49 @@
 package com.barrica.vinotinto.application.usecases.component;
 
 import com.twitter.clientlib.ApiException;
-import com.twitter.clientlib.TwitterCredentialsBearer;
 import com.twitter.clientlib.TwitterCredentialsOAuth1;
-import com.twitter.clientlib.TwitterCredentialsOAuth2;
 import com.twitter.clientlib.api.TwitterApi;
-import com.twitter.clientlib.auth.HttpBasicAuth;
-import com.twitter.clientlib.model.*;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
+import com.twitter.clientlib.model.CreateTweetRequest;
+import com.twitter.clientlib.model.CreateTweetRequestPoll;
+import com.twitter.clientlib.model.SingleUserLookupResponse;
+import com.twitter.clientlib.model.TweetCreateResponse;
+import jakarta.annotation.PostConstruct;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
-/*
- * Sample code to demonstrate the use of the v2 Tweets endpoint
- * */
+@Component
 public class TweetsDemo {
 
-    static String bearer = "AAAAAAAAAAAAAAAAAAAAAJ%2FxtQEAAAAAPGoLfNNkBlkJ1E98v%2F1X45lXcy0%3DVn4wIeLzvG9Y1qoQaPlLY1qi3qWzoHaRsX9A2h7d3LuRbWXCoH";
+    @Value("${twitter.consumer.key}")
+    private String twitterConsumerKey;
 
-    // To set your enviornment variables in your terminal run the following line:
-    // export 'BEARER_TOKEN'='<your_bearer_token>'
+    @Value("${twitter.consumer.secret}")
+    private String twitterConsumerSecret;
 
-   /* public static void main(String args[]) throws IOException, URISyntaxException {
-        String bearerToken = "AAAAAAAAAAAAAAAAAAAAAJ%2FxtQEAAAAAPGoLfNNkBlkJ1E98v%2F1X45lXcy0%3DVn4wIeLzvG9Y1qoQaPlLY1qi3qWzoHaRsX9A2h7d3LuRbWXCoH";
+    @Value("${twitter.token}")
+    private String twitterToken;
 
-        if (null != bearerToken) {
-            //Replace comma separated ids with Tweets Ids of your choice
-            String response = getTweets("1228393702244134912", bearerToken);
-            System.out.println(response);
-        } else {
-            System.out.println("There was a problem getting you bearer token. Please make sure you set the BEARER_TOKEN environment variable");
-        }
-    }*/
+    @Value("${twitter.token.secret}")
+    private String twitterTokenSecret;
 
-    /*
-     * This method calls the v2 Tweets endpoint with ids as query parameter
-     * */
-    public static String getTweets(String ids, String bearerToken) throws IOException, URISyntaxException {
-        String tweetResponse = null;
+    TwitterCredentialsOAuth1 barrica;
 
-        HttpClient httpClient = HttpClients.custom()
-                .setDefaultRequestConfig(RequestConfig.custom()
-                        .setCookieSpec(CookieSpecs.STANDARD).build())
-                .build();
-
-        URIBuilder uriBuilder = new URIBuilder("https://api.twitter.com/2/tweets");
-        ArrayList<NameValuePair> queryParameters;
-        queryParameters = new ArrayList<>();
-        queryParameters.add(new BasicNameValuePair("ids", ids));
-        queryParameters.add(new BasicNameValuePair("tweet.fields", "created_at"));
-        uriBuilder.addParameters(queryParameters);
-
-        HttpGet httpGet = new HttpGet(uriBuilder.build());
-        httpGet.setHeader("Authorization", String.format("Bearer %s", bearerToken));
-        httpGet.setHeader("Content-Type", "application/json");
-
-        HttpResponse response = httpClient.execute(httpGet);
-        HttpEntity entity = response.getEntity();
-        if (null != entity) {
-            tweetResponse = EntityUtils.toString(entity, "UTF-8");
-        }
-        return tweetResponse;
+    @PostConstruct
+    public void init() {
+        barrica = new TwitterCredentialsOAuth1(
+                twitterConsumerKey,
+                twitterConsumerSecret,
+                twitterToken,
+                twitterTokenSecret);
     }
 
-    public static void getTweets(){
-        //The ID of the Tweet
-        String ids = "1778507109425983728";
 
-        TwitterApi apiInstance = new TwitterApi();
-
-        Set<String> expansions = new HashSet<>(List.of("author_id")); // Set<String> | A comma separated list of fields to expand.
-        Set<String> tweetFields = new HashSet<>(Arrays.asList("created_at", "lang", "context_annotations")); // Set<String> | A comma separated list of Tweet fields to display.
-        Set<String> userFields = new HashSet<>(Arrays.asList("created_at", "description", "name")); // Set<String> | A comma separated list of User fields to display.
-
-
-        // Instantiate auth credentials (App-only example)
-        TwitterCredentialsBearer credentials = new TwitterCredentialsBearer(bearer);
-
-        // Pass credentials to library client
-        apiInstance.setTwitterCredentials(credentials);
-
-
-        try {
-            SingleTweetLookupResponse result = apiInstance.tweets().findTweetById(ids, null, null, null, null, null, null);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling TweetsApi#findTweetById");
-            System.err.println("Status code: " + e.toString());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            //e.printStackTrace();
-        }
-
-    }
-
-    public static String createTweets(TwitterCredentialsOAuth1 twitterCredentialsOAuth, String text, String tweetIdQuote){
+    public String createTweets(String text, String tweetIdQuote){
         String tweetId = "0";
 
         // Instantiate library client
@@ -118,7 +53,7 @@ public class TweetsDemo {
         //TwitterCredentialsBearer credentials = new TwitterCredentialsBearer(bearer);
 
         // Pass credentials to library client
-        apiInstance.setTwitterCredentials(twitterCredentialsOAuth);
+        apiInstance.setTwitterCredentials(barrica);
 
         CreateTweetRequest createTweetRequest = new CreateTweetRequest();
         // The text of the Tweet
@@ -155,52 +90,11 @@ public class TweetsDemo {
         return tweetId;
     }
 
-    public static String getUsers(String usernames) throws IOException, URISyntaxException {
-        String userResponse = null;
-
-        HttpClient httpClient = HttpClients.custom()
-                .setDefaultRequestConfig(RequestConfig.custom()
-                        .setCookieSpec(CookieSpecs.STANDARD).build())
-                .build();
-
-        URIBuilder uriBuilder = new URIBuilder("https://api.twitter.com/2/users/by");
-        ArrayList<NameValuePair> queryParameters;
-        queryParameters = new ArrayList<>();
-        queryParameters.add(new BasicNameValuePair("usernames", usernames));
-        queryParameters.add(new BasicNameValuePair("user.fields", "created_at,description,pinned_tweet_id"));
-        uriBuilder.addParameters(queryParameters);
-
-        HttpGet httpGet = new HttpGet(uriBuilder.build());
-        httpGet.setHeader("Authorization", String.format("Bearer %s", bearer));
-        httpGet.setHeader("Content-Type", "application/json");
-
-        HttpResponse response = httpClient.execute(httpGet);
-        HttpEntity entity = response.getEntity();
-        if (null != entity) {
-            userResponse = EntityUtils.toString(entity, "UTF-8");
-        }
-        return userResponse;
-    }
-
-    public static void getUserInfo(TwitterCredentialsOAuth1 twitterCredentialsOAuth){
+    private void getUserInfo(TwitterCredentialsOAuth1 twitterCredentialsOAuth){
         try {
-            /*TwitterCredentialsOAuth1 twitterCredentialsOAuth1 = new TwitterCredentialsOAuth1(
-                    "QVU74erE6Pp7wgcqCHHem6KBj",
-                    "v8XJWmVIdxnAHCPS8WzihZkBNyVF5sDl1TkB0RvtmcVjcBj2T1",
-                    "76861750-dBdW2mSQ9QScthEg5ri68qTXz3lkR8gYu1zi6KswZ",
-                    "IxgdpoFn20kA3urmKk0drksnozNZp09dgwz7ULKEaPQd5");
-
-            /*TwitterCredentialsOAuth2 twitterCredentialsOAuth2 = new TwitterCredentialsOAuth2(
-                    "TEN2V0s4YWFaVXYzZ0U5a081em46MTpjaQ",
-                    "SDeqyXML22PPRp90Avg8Mue3NR16fnT5ThuZwTbL9nCcO080li",
-                    "76861750-MqLlKmPAQ5Tu9nBWJdQNgI6cJicCoq7sUstldHZc4",
-                    "false");*/
 
             // Instantiate library client
             TwitterApi apiInstance = new TwitterApi();
-
-            // Instantiate auth credentials (App-only example)
-            TwitterCredentialsBearer credentials = new TwitterCredentialsBearer(bearer);
 
             // Pass credentials to library client
             apiInstance.setTwitterCredentials(twitterCredentialsOAuth);
@@ -215,7 +109,7 @@ public class TweetsDemo {
         }
     }
 
-    public static void createPoll(TwitterCredentialsOAuth1 twitterCredentialsOAuth){
+    private void createPoll(TwitterCredentialsOAuth1 twitterCredentialsOAuth){
         // Instantiate library client
         TwitterApi apiInstance = new TwitterApi();
 
@@ -254,7 +148,7 @@ public class TweetsDemo {
         }
     }
 
-    public static void replayTweets(TwitterCredentialsOAuth1 twitterCredentialsOAuth, String text, String id){
+    private void replayTweets(TwitterCredentialsOAuth1 twitterCredentialsOAuth, String text, String id){
         // Set the params values
 
 

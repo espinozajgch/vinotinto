@@ -97,6 +97,7 @@ public class SofaScoreService {
     }
 
     public List<PlayerMatchOverallRRSSDto> getPlayerMatchOverallRRSS(boolean tweet) {
+
         return sofaScoreComponent.getPlayersHasMatchList().stream()
                 .map(playerDto -> {
                     List<MatchDto> matchDtoList = sofaScoreComponent.getMatchListNotPublishedByPlayerAndByStatus(playerDto.getPlayerIdSofaScore(), 100);

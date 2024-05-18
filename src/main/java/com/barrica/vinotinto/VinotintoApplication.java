@@ -2,32 +2,18 @@ package com.barrica.vinotinto;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 @SpringBootApplication
+@PropertySource("file:${user.home}/.config/external.properties")
 public class VinotintoApplication {
-
 
 	public static void main(String[] args) throws IOException, URISyntaxException {
 		SpringApplication.run(VinotintoApplication.class, args);
 
-		/*String t = "\uD83E\uDD16\uD83C\uDF77\n" +
-				"\uD83C\uDDFB\uD83C\uDDEA@KervinAndrade2 - @FortalezaEC\n" +
-				"\uD83D\uDDD3\uFE0FJ5 CONMEBOL Sudamericana\n" +
-				"\uD83E\uDD45Boca Juniors 1-1 Fortaleza\n" +
-				"\n" +
-				"\uD83D\uDCCA@SofascoreLA\n" +
-				"⏱Minutos: 15\n" +
-				"⚽Goles: 1\n" +
-				"\uD83C\uDFAFDisparos a Puerta: 1\n" +
-				"✅Pases: 2/3 (66%)\n" +
-				"✅Balones Largos: 1/1 (100%)\n" +
-				"✅Duelos Ganados: 1\n" +
-				"⭐Rating: 7.4\n" +
-				"https://twitter.com/BocaJrsGolSudam/status/1790922814213484806";
-		System.out.println(t.length());
 		/*
 		Document doc = Jsoup
 				.connect("https://www.google.com/search?q=real+avila&sca_esv=be445f0cc062ab15&rlz=1C5CHFA_enES1096ES1096&sxsrf=ADLYWIKDiSnRvZ-d5DliZKnWTNaNf4v_ag%3A1715025854848&ei=vjc5Zr26M9y5i-gPlZqZSA&ved=0ahUKEwi9ke-W6fmFAxXc3AIHHRVNBgkQ4dUDCBA&uact=5&oq=real+avila&gs_lp=Egxnd3Mtd2l6LXNlcnAiCnJlYWwgYXZpbGEyDxAuGIAEGEYYJxiKBRj9ATILEAAYgAQYsQMYgwEyCxAAGIAEGLEDGIMBMgQQABgDMgUQABiABDILEAAYgAQYsQMYgwEyDhAuGIAEGMcBGI4FGK8BMgUQABiABDIEEAAYAzIFEAAYgAQyGRAAGIAEGEYYigUY_QEYlwUYjAUY3QTYAQNIgBhQiQhYkBRwAngBkAEAmAGWAaABpwSqAQMyLjO4AQPIAQD4AQGYAgegAvAEwgIHECMYsAMYJ8ICBxAuGLADGCfCAgoQABiwAxjWBBhHwgINEAAYgAQYsAMYQxiKBcICExAuGIAEGLADGEMYyAMYigXYAQHCAgoQLhiABBgnGIoFwgILEC4YgAQYsQMYgwHCAg4QABiABBixAxiDARiKBcICBxAuGIAEGArCAhcQLhiABBiKBRiXBRjcBBjeBBjgBNgBApgDAIgGAZAGFLoGBggBEAEYCLoGBggCEAEYFLoGBggDEAEYE5IHAzMuNKAH_kI#sie=t;/m/026_phn;2;/m/0d56yj;st;fp;1;;;")
@@ -44,52 +30,6 @@ public class VinotintoApplication {
 		for (Map.Entry<String, String> entry : worldFlags.entrySet()) {
 			System.out.println("País: " + entry.getKey() + ", Emoji: " + entry.getValue());
 		}
-
-		 */
-
-		//String response = getUsers("espinozajgch");
-		//System.out.println(response);
-		//getUserInfo();
-
-/*
-		TwitterCredentialsOAuth1 espinozajgch = new TwitterCredentialsOAuth1(
-				"yCUDD2biYAUlkt9cG9w2GlwGM",
-				"6QIGHlyBWpLMHR4jaTVr1gt9AZw49o4O6dej5FWr3dka0CW2FG",
-				"76861750-0d8sUvEgynS2ikbAFk3ZekOthijtIQ7z4H3ldX358",
-				"ALyMvDj3X2YjcNG0R4qaukR31z5vZxlbfYUvFUt968vsv");
-
-		/*
-		TwitterCredentialsOAuth1 barrica = new TwitterCredentialsOAuth1(
-				"o39STRCZAkQVrBtk3vkuUZLI6",
-				"z4QdjTCFnn2JToeCjZLiRzo5S0hrSX0pHA2nGSsd7UuYM0nNEA",
-				"1774902969072316416-5H60t98Qsga1Td5rH0xT0TUfkLIy0x",
-				"OBAkQ1En1fgYtnxqrSGTDBDVI57LrtFoEKsldLddz5Z8f");
-
-
-
-		createTweets(espinozajgch, "Partido 2 \n https://youtu.be/dYVdHX-odcE");
-		*/
-
-		//getUserInfo(barrica);
-		//createPoll(espinozajgch);
-		//replayTweets(espinozajgch,"\uD83D\uDD25", "1779306611728662980");
-
-
-		//createTweets();
-		//getTweets();
-		/*
-		String bearerToken = "AAAAAAAAAAAAAAAAAAAAAJ%2FxtQEAAAAAPGoLfNNkBlkJ1E98v%2F1X45lXcy0%3DVn4wIeLzvG9Y1qoQaPlLY1qi3qWzoHaRsX9A2h7d3LuRbWXCoH";
-
-		if (null != bearerToken) {
-			//Replace comma separated ids with Tweets Ids of your choice
-			String response = getTweets("1778507109425983728", bearerToken);
-			System.out.println(response);
-		} else {
-			System.out.println("There was a problem getting you bearer token. Please make sure you set the BEARER_TOKEN environment variable");
-		}
-
-		 */
-/*
 
 		Document doc;
 

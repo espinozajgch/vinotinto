@@ -1,7 +1,7 @@
 package com.barrica.vinotinto.application.mapper;
 
-import com.barrica.vinotinto.infrastructure.adapter.entity.MatchRrssDbo;
 import com.barrica.vinotinto.domain.model.dto.MatchRrssDto;
+import com.barrica.vinotinto.infrastructure.adapter.entity.MatchRrssDbo;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

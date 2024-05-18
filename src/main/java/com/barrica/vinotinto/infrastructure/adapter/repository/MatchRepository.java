@@ -4,7 +4,6 @@ import com.barrica.vinotinto.infrastructure.adapter.entity.MatchDbo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface MatchRepository extends JpaRepository<MatchDbo, Integer> {
@@ -34,7 +33,8 @@ public interface MatchRepository extends JpaRepository<MatchDbo, Integer> {
             "INNER JOIN PlayerMatchDbo pm on p.playerIdSofaScore = pm.playerId " +
             "INNER JOIN MatchDbo md on pm.matchId = md.matchIdSofaScore " +
             "WHERE p.playerIdSofaScore = :playerId " +
+            "AND md.published = false " +
             "AND md.matchDate = :matchDate")
-    MatchDbo findPlayerMatchesByDate(Integer playerId, String matchDate);/**/
+    MatchDbo findPlayerMatchesByDateAndByPublishedFalse(Integer playerId, String matchDate);/**/
 
 }

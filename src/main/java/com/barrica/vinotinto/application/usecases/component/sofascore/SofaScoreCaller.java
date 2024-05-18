@@ -1,11 +1,11 @@
 package com.barrica.vinotinto.application.usecases.component.sofascore;
 
 import com.barrica.vinotinto.application.usecases.component.client.HttpConnector;
-import com.barrica.vinotinto.infrastructure.adapter.entity.Rfef;
 import com.barrica.vinotinto.domain.model.dto.MatchDto;
 import com.barrica.vinotinto.domain.model.dto.MatchHighlightsDto;
 import com.barrica.vinotinto.domain.model.dto.MatchStatisticsDto;
 import com.barrica.vinotinto.domain.model.dto.PlayerDto;
+import com.barrica.vinotinto.infrastructure.adapter.entity.Rfef;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -574,7 +574,7 @@ public class SofaScoreCaller implements HttpCaller {
                         .matchCountry(jsonObjectLastEvent.has("venue") ? jsonObjectLastEvent.getJSONObject("venue").getJSONObject("country").getString("name") : "")
                         .matchStadium(jsonObjectLastEvent.has("venue") ? jsonObjectLastEvent.getJSONObject("venue").getJSONObject("stadium").getString("name") : "")
                         .matchReferee(jsonObjectLastEvent.has("referee") ? jsonObjectLastEvent.getJSONObject("referee").getString("name") : "")
-                        .matchRefereeCountry(jsonObjectLastEvent.has("referee") ? jsonObjectLastEvent.getJSONObject("referee").getJSONObject("country").getString("name") : "")
+                        .matchRefereeCountry(jsonObjectLastEvent.has("referee") ? jsonObjectLastEvent.getJSONObject("referee").getJSONObject("country").has("name") ? jsonObjectLastEvent.getJSONObject("referee").getJSONObject("country").getString("name"): "" : "")
                         .published(false)
                         .status(jsonObjectLastEvent.getJSONObject("status").getInt("code"))
                         .build();
