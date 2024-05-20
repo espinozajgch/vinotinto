@@ -26,7 +26,7 @@ public interface SofaScoreUseCase {
 
     PlayerDto syncPlayer(Integer playerId);
 
-    void syncPlayersMatches();
+    void syncPlayersMatches(String date);
 
     void syncPlayerMatch(Integer playerId);
 

@@ -85,6 +85,11 @@ public class SofaScoreUseCaseImpl implements SofaScoreUseCase {
         return playerDboList.stream().map(item -> playerMapper.mapPlayerDboToDto(item)).toList();
     }
 
+    public List<PlayerDto> getPlayersHasMatchToPublishList() {
+        List<PlayerDbo> playerDboList = playerRepository.findAllByHasMatchTrueOrderById();
+        return playerDboList.stream().map(item -> playerMapper.mapPlayerDboToDto(item)).toList();
+    }
+
     @Override
     public List<PlayerDto> syncPlayers() {
         int teamId = 4722;
@@ -124,19 +129,24 @@ public class SofaScoreUseCaseImpl implements SofaScoreUseCase {
     }
 
     @Override
-    public void syncPlayersMatches(){
+    public void syncPlayersMatches(String date) {
 
         List<PlayerDbo> playerDboList = playerRepository.findAllByHasMatchTrueOrderById();
+
+        String formattedDate;
+        if (!StringUtils.hasLength(date)){
+            LocalDate localDate = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            formattedDate = localDate.format(formatter);
+        } else {
+            formattedDate = date;
+        }
 
         playerDboList.forEach( player ->{
             System.out.println("#####################");
             System.out.println("Player:" + player.getPlayerName());
             System.out.println("Team:" + player.getTeam());
-
-            LocalDate localDate = LocalDate.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            String formattedDate = localDate.format(formatter);
-            System.out.println("Fecha Actual:" + formattedDate);
+            System.out.println("Fecha del Partido:" + formattedDate);
 
             MatchDbo matchDbo = matchRepository.findPlayerMatchesByDateAndByPublishedFalse(player.getPlayerIdSofaScore(), formattedDate);
 
@@ -148,9 +158,17 @@ public class SofaScoreUseCaseImpl implements SofaScoreUseCase {
                     //MatchDto matchDto = sofaScoreCaller.getLastMatchIdByPlayer(match.getMatchIdSofaScore());
 
                     if(Objects.nonNull(matchDto)) {
-                        System.out.println("Partido Finalizado");
-                        matchDto.setId(matchDbo.getId());
-                        syncMatch(matchDto, player.getPlayerIdSofaScore());
+                        if(matchDto.getStatus() == 100) {
+                            System.out.println("Partido Finalizado");
+                            matchDto.setId(matchDbo.getId());
+                            syncMatch(matchDto, player.getPlayerIdSofaScore());
+                        }
+                        else
+                        if(matchDto.getStatus() == 60){
+                            System.out.println("Partido Postergado");
+                            matchDbo.setStatus(matchDto.getStatus());
+                            syncMatchDBO(matchDbo);
+                        }
                     }
                     else{
                         System.out.println("Partido no iniciado");
@@ -298,6 +316,14 @@ public class SofaScoreUseCaseImpl implements SofaScoreUseCase {
             System.out.println("Partido Actualizado - Añadiendo Estadisticas del Jugador");
             syncHighlights(matchDto.getMatchIdSofaScore(), matchDto.getHasGlobalHighlights());
             syncStatistics(matchDto.getMatchIdSofaScore(), playerId);
+        }
+    }
+
+    private void syncMatchDBO(MatchDbo matchDbo){
+        try {
+            matchRepository.save(matchDbo);
+        } catch (DataIntegrityViolationException e) {
+            System.out.println("Error: Clave primaria duplicada al insertar el Match " + matchDbo.getMatchIdSofaScore());
         }
     }
 

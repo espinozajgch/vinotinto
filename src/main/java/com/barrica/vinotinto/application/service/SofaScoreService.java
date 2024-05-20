@@ -35,8 +35,8 @@ public class SofaScoreService {
                 .toList();
     }
 
-    public void syncPlayersMatches(){
-        sofaScoreComponent.syncPlayersMatches();
+    public void syncPlayersMatches(String date){
+        sofaScoreComponent.syncPlayersMatches(date);
     }
 
     public void syncPlayersNextMatches(){

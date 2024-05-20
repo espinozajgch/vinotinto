@@ -62,6 +62,7 @@ public class SofaScoreCaller implements HttpCaller {
                 .team(player.getJSONObject("team").getString("shortName"))
                 .teamIdSofaScore(player.getJSONObject("team").getInt("id"))
                 .teamCountry(player.getJSONObject("team").getJSONObject("country").getString("name"))
+                .hasMatch(true)
                 .build();
     }
 
@@ -547,7 +548,8 @@ public class SofaScoreCaller implements HttpCaller {
                 }
             }
 
-            if(jsonObjectLastEvent.getJSONObject("status").getString("type").equals("finished")) {
+            String status = jsonObjectLastEvent.getJSONObject("status").getString("type");
+            if("finished".equalsIgnoreCase(status)) {
                 return MatchDto.builder()
                         .matchIdSofaScore(eventId)
                         .matchTimestamp(Integer.toString(jsonObjectLastEvent.getInt("startTimestamp")))
@@ -579,10 +581,15 @@ public class SofaScoreCaller implements HttpCaller {
                         .status(jsonObjectLastEvent.getJSONObject("status").getInt("code"))
                         .build();
             }
-            else {
+            else if("postponed".equalsIgnoreCase(status)) {
+                return MatchDto.builder()
+                        .status(jsonObjectLastEvent.getJSONObject("status").getInt("code"))
+                        .build();
+            }
+            else
+            {
                 return null;
             }
-
         }
         else {
             return null;
