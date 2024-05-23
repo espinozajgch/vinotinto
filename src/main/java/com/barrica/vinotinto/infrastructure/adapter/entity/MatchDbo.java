@@ -95,4 +95,16 @@ public class MatchDbo {
 
     @Column(name = "match_status")
     private Integer status;
+
+    @Column(name = "home_overtime_score")
+    Integer homeOvertimeScore;
+
+    @Column(name = "away_overtime_score")
+    Integer awayOvertimeScore;
+
+    @Column(name = "home_penalty_score")
+    Integer homePenaltyScore;
+
+    @Column(name = "away_penalty_score")
+    Integer awayPenaltyScore;
 }

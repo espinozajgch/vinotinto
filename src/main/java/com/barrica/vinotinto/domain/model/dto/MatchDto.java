@@ -35,4 +35,8 @@ public class MatchDto {
     Boolean published;
     String matchTimestamp;
     Integer status;
+    Integer homeOvertimeScore;
+    Integer awayOvertimeScore;
+    Integer homePenaltyScore;
+    Integer awayPenaltyScore;
 }

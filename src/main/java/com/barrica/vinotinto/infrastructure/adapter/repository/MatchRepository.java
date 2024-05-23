@@ -16,7 +16,7 @@ public interface MatchRepository extends JpaRepository<MatchDbo, Integer> {
     @Query("select m from MatchDbo m inner join PlayerMatchDbo pm on m.matchIdSofaScore = pm.matchId where pm.playerId = :playerId and m.published = false")
     List<MatchDbo> findMatchesByPlayerIdAndByPublishedFalse(int playerId);
 
-    @Query("select m from MatchDbo m inner join PlayerMatchDbo pm on m.matchIdSofaScore = pm.matchId where pm.playerId = :playerId and m.published = false and m.status = :status")
+    @Query("select m from MatchDbo m inner join PlayerMatchDbo pm on m.matchIdSofaScore = pm.matchId where pm.playerId = :playerId and m.published = false and m.status >= :status")
     List<MatchDbo> findMatchesByPlayerIdAndByPublishedFalseAndStatus(int playerId, int status);
 
     @Query("SELECT md " +

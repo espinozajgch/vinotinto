@@ -158,7 +158,7 @@ public class SofaScoreUseCaseImpl implements SofaScoreUseCase {
                     //MatchDto matchDto = sofaScoreCaller.getLastMatchIdByPlayer(match.getMatchIdSofaScore());
 
                     if(Objects.nonNull(matchDto)) {
-                        if(matchDto.getStatus() == 100) {
+                        if(matchDto.getStatus() >= 100) {
                             System.out.println("Partido Finalizado");
                             matchDto.setId(matchDbo.getId());
                             syncMatch(matchDto, player.getPlayerIdSofaScore());
@@ -518,13 +518,24 @@ public class SofaScoreUseCaseImpl implements SofaScoreUseCase {
     }
 
     private String getResult(MatchDto matchDto) {
+        String homeScore = Integer.toString(matchDto.getHomeScore());
+        String awayScore = Integer.toString(matchDto.getAwayScore());
+
+        if(matchDto.getStatus() == 110){
+            homeScore = Integer.toString(matchDto.getHomeOvertimeScore());
+            awayScore = Integer.toString(matchDto.getAwayOvertimeScore());
+        } else if (matchDto.getStatus() == 120) {
+            homeScore += "(" + matchDto.getHomePenaltyScore() + ") ";
+            awayScore = " " + awayScore + "(" + matchDto.getAwayPenaltyScore() + ")";
+        }
+
         return new StringBuilder()
                 .append(emojiGenerator.getMetaIcon().trim())
                 .append(matchDto.getHomeTeamShortName().trim())
                 .append(" ")
-                .append(matchDto.getHomeScore())
+                .append(homeScore)
                 .append("-")
-                .append(matchDto.getAwayScore())
+                .append(awayScore)
                 .append(" ")
                 .append(matchDto.getAwayTeamShortName().trim())
                 .toString();

@@ -23,6 +23,8 @@ public class SofaScoreCaller implements HttpCaller {
 
     private final String TERCERA_RFEF = "54347";
 
+    private final String HOST_SOFA_SCORE = "https://www.sofascore.com";
+
     private Map<Integer, String> groups = new HashMap<>(){{
         put(54314, "11346"); // Grupo 1
         put(54315, "11347"); // Grupo 2
@@ -46,7 +48,7 @@ public class SofaScoreCaller implements HttpCaller {
 
     @Override
     public PlayerDto getPlayersByPlayerId(int playerId) {
-        JSONObject jsonObject = new JSONObject(sofaScore.getResponse("https://api.sofascore.com/api/v1/player/" + playerId));
+        JSONObject jsonObject = new JSONObject(sofaScore.getResponse(HOST_SOFA_SCORE + "/api/v1/player/" + playerId));
 
         JSONObject player =  jsonObject.getJSONObject("player");
 
@@ -69,7 +71,7 @@ public class SofaScoreCaller implements HttpCaller {
     @Override
     public List<PlayerDto> getPlayersListByTeamId(int teamId){
 
-        JSONObject myObject = new JSONObject(sofaScore.getResponse("https://api.sofascore.com/api/v1/team/"+ teamId +"/players"));
+        JSONObject myObject = new JSONObject(sofaScore.getResponse(HOST_SOFA_SCORE + "/api/v1/team/"+ teamId +"/players"));
 
         List<PlayerDto> playerDtoList = new ArrayList<>();
 
@@ -101,7 +103,7 @@ public class SofaScoreCaller implements HttpCaller {
 
     public MatchDto getNextMatchIdByPlayer(int teamId){
 
-        JSONObject myObject = new JSONObject(sofaScore.getResponse("https://api.sofascore.com/api/v1/team/" + teamId + "/events/next/0"));
+        JSONObject myObject = new JSONObject(sofaScore.getResponse(HOST_SOFA_SCORE + "/api/v1/team/" + teamId + "/events/next/0"));
 
         int lastEvent = 0;
         if(!myObject.has("events"))
@@ -178,7 +180,7 @@ public class SofaScoreCaller implements HttpCaller {
     @Override
     public MatchDto getLastMatchIdByPlayer(int playerId){
 
-        JSONObject myObject = new JSONObject(sofaScore.getResponse("https://api.sofascore.com/api/v1/player/" + playerId + "/events/last/0"));
+        JSONObject myObject = new JSONObject(sofaScore.getResponse(HOST_SOFA_SCORE + "/api/v1/player/" + playerId + "/events/last/0"));
 
         int lastEvent = 0;
         if(myObject.has("events"))
@@ -260,7 +262,7 @@ public class SofaScoreCaller implements HttpCaller {
 
     public List<MatchDto> getMatchByPlayer(int playerId, int page){
 
-        JSONObject myObject = new JSONObject(sofaScore.getResponse("https://api.sofascore.com/api/v1/player/" + playerId + "/events/last/" + page));
+        JSONObject myObject = new JSONObject(sofaScore.getResponse(HOST_SOFA_SCORE + "/api/v1/player/" + playerId + "/events/last/" + page));
 
         List<MatchDto> matches = new ArrayList<>();
         //int lastEvent = 0;
@@ -380,7 +382,7 @@ public class SofaScoreCaller implements HttpCaller {
     @Override
     public void getMatchDataById(int eventId){
 
-        JSONObject myObject = new JSONObject(sofaScore.getResponse("https://api.sofascore.com/api/v1/event/"+eventId));
+        JSONObject myObject = new JSONObject(sofaScore.getResponse(HOST_SOFA_SCORE + "/api/v1/event/"+eventId));
 
         System.out.println("------------------------------");
         System.out.println(myObject.getJSONObject("event").getJSONObject("season").getString("name"));
@@ -399,7 +401,7 @@ public class SofaScoreCaller implements HttpCaller {
     @Override
     public List<MatchStatisticsDto> getMatchStatisticsByPlayer(int eventId, int playerId){
 
-        String url = "https://api.sofascore.com/api/v1/event/"+ eventId +"/player/"+playerId+"/statistics";
+        String url = HOST_SOFA_SCORE + "/api/v1/event/"+ eventId +"/player/"+playerId+"/statistics";
         JSONObject objectResponse = new JSONObject(sofaScore.getResponse(url));
 
         List<MatchStatisticsDto> playerMatchStatisticsDtoList = new ArrayList<>();
@@ -429,7 +431,7 @@ public class SofaScoreCaller implements HttpCaller {
     @Override
     public List<MatchHighlightsDto> getMatchHighlights(int eventId){
 
-        JSONObject myObject = new JSONObject(sofaScore.getResponse("https://api.sofascore.com/api/v1/event/"+eventId+"/highlights"));
+        JSONObject myObject = new JSONObject(sofaScore.getResponse(HOST_SOFA_SCORE + "/api/v1/event/"+eventId+"/highlights"));
 
         if(myObject.has("highlights")){
             List<MatchHighlightsDto> matchHighlightsDtoList = new ArrayList<>();
@@ -511,7 +513,7 @@ public class SofaScoreCaller implements HttpCaller {
 
     public MatchDto getLastMatchByMatchId(int matchId){
 
-        JSONObject myObject = new JSONObject(sofaScore.getResponse("https://api.sofascore.com/api/v1/event/" + matchId));
+        JSONObject myObject = new JSONObject(sofaScore.getResponse(HOST_SOFA_SCORE + "/api/v1/event/" + matchId));
 
         if(myObject.has("event")){
 
@@ -550,14 +552,34 @@ public class SofaScoreCaller implements HttpCaller {
 
             String status = jsonObjectLastEvent.getJSONObject("status").getString("type");
             if("finished".equalsIgnoreCase(status)) {
+
+                int homeOvertimeScore = 0;
+                int awayOvertimeScore = 0;
+                int homePenaltyScore = 0;
+                int awayPenaltyScore = 0;
+
+                if(jsonObjectLastEvent.getJSONObject("status").getInt("code") == 110){
+                    homeOvertimeScore = jsonObjectLastEvent.getJSONObject("homeScore").getInt("overtime");
+                    awayOvertimeScore = jsonObjectLastEvent.getJSONObject("awayScore").getInt("overtime");
+                }
+
+                if(jsonObjectLastEvent.getJSONObject("status").getInt("code") == 120){
+                    homePenaltyScore = jsonObjectLastEvent.getJSONObject("homeScore").getInt("penalties");
+                    awayPenaltyScore = jsonObjectLastEvent.getJSONObject("awayScore").getInt("penalties");
+                }
+
                 return MatchDto.builder()
                         .matchIdSofaScore(eventId)
                         .matchTimestamp(Integer.toString(jsonObjectLastEvent.getInt("startTimestamp")))
                         .matchDate(formatTimestamp(Integer.toString(jsonObjectLastEvent.getInt("startTimestamp"))))
                         .homeTeam(jsonObjectLastEvent.getJSONObject("homeTeam").getString("name"))
                         .homeScore(jsonObjectLastEvent.getJSONObject("homeScore").getInt("normaltime"))
+                        .homeOvertimeScore(homeOvertimeScore)
+                        .homePenaltyScore(homePenaltyScore)
                         .awayTeam(jsonObjectLastEvent.getJSONObject("awayTeam").getString("name"))
                         .awayScore(jsonObjectLastEvent.getJSONObject("awayScore").getInt("normaltime"))
+                        .awayOvertimeScore(awayOvertimeScore)
+                        .awayPenaltyScore(awayPenaltyScore)
                         .tournamentIdSofaScore(jsonObjectLastEvent.getJSONObject("tournament").getJSONObject("uniqueTournament").getInt("id"))
                         .tournamentName(jsonObjectLastEvent.getJSONObject("tournament").getJSONObject("uniqueTournament").getString("name"))
                         .tournamentStage(round)
